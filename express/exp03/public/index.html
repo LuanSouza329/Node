@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projeto</title>
+    <style>
+        *{
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 1em;
+        }
+        body{
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            align-content: center;
+        }
+        main{
+            display: flex;
+            flex-flow: row nowrap;
+            flex-basis: 500px;
+            height: 500px;
+            justify-content: center;
+            align-items: center;
+            background-color: rgb(25, 159, 159);
+        }
+        div > input {
+            padding: 10px;
+            border-radius: 10px;
+            width: 90%;
+        }
+        div{ 
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+
+    </header>
+    <main>
+        <form action="/form" method="POST">
+            <div>
+                <label for="i_name">Nome: </label>
+                <input type="text" name="i_name" id="i_name" autocomplete="given-name" required>
+            </div>
+            <div>
+                <input type="submit" value="Enviar">
+            </div>
+        </form>
+    </main>
+    <footer>
+
+    </footer>
+</body>
+</html>

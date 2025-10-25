@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apenas um teste</title>
+    <style>
+        main{
+            display: flex;
+            flex-flow: column nowrap;
+            min-height: 67vh;
+        }
+        article{
+            padding: 10px;
+        }
+        p{
+            text-indent: 15px;
+        }
+        h2 {
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <%- include("./parcial/header.ejs"); %>
+    <% const nome = "Luan de Souza Nunes"%>
+    <main>
+        <section>
+            <article>
+                <h2>Teste de corpo</h2>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis ut maiores voluptate consequuntur molestias repellat doloremque repudiandae, laboriosam cumque inventore debitis vero quam architecto, quod reprehenderit pariatur dolorum maxime atque?
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur voluptatem magni nisi at vel aspernatur autem placeat officia laudantium, asperiores accusamus, animi qui suscipit nemo eveniet officiis cumque magnam est.
+                </p>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Eum ut, minima obcaecati fugit ipsam debitis. Nesciunt obcaecati iure animi in sapiente ea, praesentium omnis quas labore. Beatae tempora similique molestias!
+                </p>
+            </article>
+            <article>
+                <h2>Segundo paragrafo</h2>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat voluptatem, possimus repudiandae amet ad, sequi suscipit beatae optio consequatur consequuntur reiciendis similique minima excepturi! Dolore saepe hic necessitatibus illum consectetur!
+                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorem officiis aliquam illo, consequatur quidem tempore laborum. Quasi nulla quos commodi perspiciatis dignissimos! Perspiciatis voluptatibus voluptate dolorem, nostrum ratione suscipit error?
+                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Qui totam corrupti sequi? Velit ipsum, cumque, voluptas in aut voluptatem voluptatum culpa dolore iste doloribus consectetur perferendis, sequi iure totam accusamus!
+                </p>
+            </article>
+        </section>
+    </main>
+    <%- include("./parcial/footer.ejs"); %>
+</body>
+</html>

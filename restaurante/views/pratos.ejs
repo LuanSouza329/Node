@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nosso Cardápio</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
+        h1 { color: #333; }
+        .prato-item {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .prato-item h2 { margin-top: 0; color: #007bff; }
+        .prato-item p { color: #555; }
+        .prato-item .preco { font-weight: bold; color: #28a745; }
+    </style>
+</head>
+<body>
+    <h1><%= 'Nosso Cardápio' %></h1> <% if (pratos && pratos.length > 0) { %>
+        <% pratos.forEach(function(prato) { %>
+            <div class="prato-item">
+                <h2><%= prato.nome %></h2>
+                <p><%= prato.descricao %></p>
+                <p class="preco">Preço: R$ <%= prato.preco.toFixed(2).replace('.', ',') %></p>
+            </div>
+        <% }); %>
+    <% } else { %>
+        <p>Nenhum prato disponível no momento. Volte mais tarde!</p>
+    <% } %>
+</body>
+</html>

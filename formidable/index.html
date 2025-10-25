@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UpLoad</title>
+    <style>
+        form{
+            display: flex;
+            flex-flow: column;
+        }
+        div{
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <form action="arquivo" method="post">
+        <div>
+            <label for="e_name">Envie seu arquivo</label>
+            <input type="file" name="e_arquivo">
+        </div>
+        <div>
+            <input type="submit" value="Enviar">
+        </div>
+    </form>
+</body>
+</html>
