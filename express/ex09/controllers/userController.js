@@ -1,85 +1,87 @@
-const pool = require("../config/db");
+const User = require("../models/User");
+const AppError = require("../src/util/AppError");
+const asyncHandler = require("../middleware/asyncMiddleWare");
 
-exports.getAllUsers = async(req, res) =>{
-    try{
-        const [rows] = await pool.query("SELECT * FROM usuarios");
-        res.status(200).json(rows);
-    }catch(err){
-        res.status(500).json({ message: "Erro ao buscar usuários", error: err.message });
+class UserController {
+  static getAllUsers = asyncHandler(async (req, res, next) => {
+    const { page, limit, sort, order, name } = req.query;
+
+    const users = await User.findAll({ page, limit, sort, order, name });
+
+    res.status(200).json({
+      success: true,
+      page: Number(page) || 1,
+      limit: Number(limit) || 5,
+      total: users.length,
+      data: users
+    });
+  });
+
+  static getUser = asyncHandler(async (req, res, next) => {
+    const { id } = req.params;
+    const user = await User.findUser(id);
+
+    if (!user) {
+      return next(new AppError("Usuário não encontrado", 404));
     }
-}
 
-exports.createUser = async(req, res) =>{
-    try{
-        const { name, email } = req.body;
+    res.status(200).json(user);
+  });
 
-        if (!name || !email) {
-            return res.status(400).json({ message: "Nome e email são obrigatórios" });
-        }
+  static createUser = asyncHandler(async (req, res, next) => {
+    const { name, email, password } = req.body;
 
-        const [rows] = await pool.query(
-            "INSERT INTO usuarios (name, email) VALUES (?, ?)",
-            [name, email]
-        );
-
-        res.status(201).json({ id: rows.insertId, name, email });
-
-    }catch(err){
-        res.status(500).json({ message: "Erro ao criar usuário", error: err.message });
+    if (!name || !email || !password) {
+      return next(new AppError("Todos os campos são obrigatórios", 400));
     }
-}
 
-exports.getUser = async (req, res) => {
-  try {
+    const existingUser = await User.findByEmail(email);
+
+    if (existingUser) {
+      return next(new AppError("E-mail já cadastrado", 400));
+    }
+
+    const newUser = await User.createUser(name, email, password);
+
+    res.status(201).json({
+      message: "Usuário criado com sucesso!",
+      user: newUser
+    });
+  });
+
+
+  static updateUser = asyncHandler(async (req, res, next) => {
     const { id } = req.params;
 
-    const [rows] = await pool.query("SELECT * FROM usuarios WHERE id = ?", [id]);
+    const { name, email } = req.body;
 
-    if (rows.length === 0) {
-      return res.status(404).json({ message: "Usuário não encontrado" });
+    if (!name || !email) {
+      return (next(new AppError("Nome e Email são obrigatórios", 400)));
     }
 
-    res.status(200).json(rows[0]); 
-  } catch (err) {
-    res.status(500).json({ message: "Erro ao buscar usuário", error: err.message });
-  }
-};
+    const updatedUser = await User.updateUser(id, name, email);
 
-exports.deleteUser = async (req, res) =>{
-    try{
-        const { id } = req.params;
-
-        const [result] = await pool.query("DELETE FROM usuarios WHERE id = ?", [id]);
-        
-        if (result.affectedRows === 0) {
-        return res.status(404).json({ message: "Usuário não encontrado" });
-        }
-
-        res.status(200).json({ message: "Usuário deletado com sucesso" });
-
-    }catch(err){
-        res.status(500).json({ message: "Erro ao deletar usuário", error: err.message });
+    if (!updatedUser) {
+      return next(new AppError("Usuário não encontrado", 404));
     }
+
+    return res.status(200).json({
+      message: "Usuário atualizado com sucesso",
+      user: updatedUser
+    });
+  })
+
+  static deleteUser = asyncHandler(async (req, res, next) => {
+    const { id } = req.params;
+
+    const deleted = await User.deleteUser(id);
+
+    if (!deleted) {
+      return next(new AppError("Usuário não encontrado", 404));
+    }
+
+    return res.status(200).json({ message: "Usuário deletado com sucesso" });
+  })
 }
 
-exports.updateUser = async(req, res) =>{
-    try {
-        const {id} = req.params;
-
-        const {name, email} = req.body;
-
-        const [result] = await pool.query("UPDATE usuarios SET name = ?, email = ? WHERE id = ?",
-            [name, email, id]
-        );
-
-        if(result.affectedRows === 0){
-            return res.status(404).json({ message: "Usuário não encontrado" });
-        }
-
-        const [updatedUser] = await pool.query("SELECT * FROM usuarios WHERE id = ?", [id]);
-
-        res.status(200).json(updatedUser[0]); 
-    } catch (err) {
-        res.status(500).json({ message: "Erro ao atualizar usuário", error: err.message });
-    }
-}
+module.exports = UserController; // 👈 exporta o controller, não o model
