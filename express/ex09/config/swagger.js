@@ -7,17 +7,27 @@ const options = {
     info: {
       title: "API de Usuários",
       version: "1.0.0",
-      description: "Documentação da API criada para fins de aprendizado",
+      description: "API RESTful com autenticação JWT e CRUD de usuários"
     },
     servers: [
-      {
-        url: "http://localhost:8000",
-        description: "Servidor local",
-      },
+      { url: "http://localhost:8000" }
     ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT"
+        }
+      }
+    },
+    security: [
+      { bearerAuth: [] }
+    ]
   },
-  apis: ["./routes/*.js"], // Aqui o Swagger vai buscar os comentários das rotas
+  apis: ["./routes/*.js"], 
 };
+
 
 const swaggerSpec = swaggerJsDoc(options);
 

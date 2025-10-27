@@ -258,7 +258,9 @@ router.put(
  * @swagger
  * /users/{id}:
  *   delete:
- *     summary: Deleta um usuário pelo ID
+ *     summary: Deleta um usuário (apenas admin)
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Usuários]
  *     parameters:
  *       - in: path
@@ -270,30 +272,17 @@ router.put(
  *     responses:
  *       200:
  *         description: Usuário deletado com sucesso
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Usuário deletado com sucesso
+ *       401:
+ *         description: Token inválido ou ausente
+ *       403:
+ *         description: Acesso negado (não é admin)
  *       404:
  *         description: Usuário não encontrado
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Usuário não encontrado
- *       500:
- *         description: Erro interno do servidor
  */
 
 router.delete(
   "/:id",
+    authMiddleware,
   [
     param("id").isInt().withMessage("O ID deve ser um número inteiro"),
     validate

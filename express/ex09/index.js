@@ -34,17 +34,8 @@ app.use(cors({
 app.use(helmet()); //Proteção de cabeçalhos HTTP
 app.use(limiter);
 
-
-
-
-
-
 app.use("/users", userRoutes);
 app.use("/auth", authRouter);
-
-app.get("/crash", (req, res, next) => {
-  next(new Error("Erro forçado para testar o middleware!"));
-});
 
 // 👇 sempre no final
 app.use(errorHandler);

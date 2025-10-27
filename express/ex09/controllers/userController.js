@@ -71,6 +71,7 @@ class UserController {
     });
   })
 
+
   static deleteUser = asyncHandler(async (req, res, next) => {
     const { id } = req.params;
 

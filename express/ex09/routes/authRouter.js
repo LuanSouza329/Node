@@ -5,6 +5,62 @@ const validate = require("../middleware/validate");
 
 const router = express.Router();
 
+
+/**
+ * @swagger
+ * /auth/signup:
+ *   post:
+ *     summary: Registra um novo usuário
+ *     tags: [Autenticação]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - email
+ *               - password
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: Maria Souza
+ *               email:
+ *                 type: string
+ *                 example: maria@email.com
+ *               password:
+ *                 type: string
+ *                 example: Senha123
+ *     responses:
+ *       201:
+ *         description: Usuário registrado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Usuário registrado com sucesso
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: integer
+ *                       example: 1
+ *                     name:
+ *                       type: string
+ *                       example: Maria Souza
+ *                     email:
+ *                       type: string
+ *                       example: maria@email.com
+ *       400:
+ *         description: Dados inválidos ou e-mail já cadastrado
+ *       500:
+ *         description: Erro interno do servidor
+ */
+
 router.post("/signup",
     [
         body("name")
@@ -20,6 +76,49 @@ router.post("/signup",
     ],
     authController.signup);
 
+
+/**
+ * @swagger
+ * /auth/login:
+ *   post:
+ *     summary: Faz login e retorna um token JWT
+ *     tags: [Autenticação]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: maria@email.com
+ *               password:
+ *                 type: string
+ *                 example: Senha123
+ *     responses:
+ *       200:
+ *         description: Login realizado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Log-in bem sucedido
+ *                 token:
+ *                   type: string
+ *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+ *       401:
+ *         description: Credenciais inválidas
+ *       500:
+ *         description: Erro interno do servidor
+ */ 
+
 router.post("/login",
     [
         body("email").isEmail().withMessage("Email inválido"),
@@ -29,3 +128,5 @@ router.post("/login",
     authController.login);
 
 module.exports = router;
+
+
