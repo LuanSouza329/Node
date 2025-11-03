@@ -2,6 +2,7 @@ const express = require("express");
 const { body } = require("express-validator");
 const authController = require("../controllers/authController");
 const validate = require("../middleware/validate");
+const { route } = require("./userRoutes");
 
 const router = express.Router();
 
@@ -95,10 +96,10 @@ router.post("/signup",
  *             properties:
  *               email:
  *                 type: string
- *                 example: maria@email.com
+ *                 example: teste@email.com
  *               password:
  *                 type: string
- *                 example: Senha123
+ *                 example: A123456
  *     responses:
  *       200:
  *         description: Login realizado com sucesso
@@ -126,6 +127,30 @@ router.post("/login",
         validate
     ],
     authController.login);
+
+/**
+ * @swagger
+ * /auth/refresh:
+ *   post:
+ *     summary: Gera um novo access token a partir do refresh token
+ *     tags: [Autenticação]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               refreshToken:
+ *                 type: string
+ *                 example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjUsImVtYWlsIjoidGVzdGVAZW1haWwuY29tIiwiaWF0IjoxNzYyMjA1ODIwLCJleHAiOjE3NjIyMDU5NDB9.a0Go3EKEAsOGpzd-t1y6rVbnKITKOrt3IWGr9BZclFU
+ *     responses:
+ *       200:
+ *         description: Novo access token gerado com sucesso
+ *       401:
+ *         description: Refresh token inválido ou expirado
+ */
+router.post("/refresh", authController.refreshToken)
 
 module.exports = router;
 

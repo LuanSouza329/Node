@@ -27,7 +27,7 @@ class authController {
         });
     })
 
-    
+
 
     static login = asyncHandler(async (req, res, next) => {
         const { email, password } = req.body;
@@ -44,14 +44,59 @@ class authController {
             return (next(new AppError("Credênciais invalidas"), 401));
         }
 
-        const token = jwt.sign(
+        const accessToken = jwt.sign(
             { id: user.id, email: user.email },
             process.env.JWT_SECRET,
             { expiresIn: process.env.JWT_EXPIRES_IN }
         );
 
-        res.json({ message: "Log-in bem sucedido", token });
+        const refreshToken = jwt.sign(
+            { id: user.id, email: user.email },
+            process.env.JWT_REFRESH_SECRET,
+            { expiresIn: process.env.JWT_REFRESH_EXPIRES_IN || "7d" }
+        );
+
+        await User.updateRefreshToken(user.id, refreshToken);
+
+        res.status(200).json({
+            message: "Login bem-sucedido",
+            accessToken,
+            refreshToken
+        });
+
     })
+
+    static refreshToken = asyncHandler(async (req, res, next) => {
+        const { refreshToken } = req.body;
+
+        if (!refreshToken) {
+            return next(new AppError("Refresh token é obrigatório", 400));
+        }
+
+        const user = await User.findByRefreshToken(refreshToken);
+
+        if (!user) {
+            return next(new AppError("Refresh token inválido", 401));
+        }
+
+        jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, (err, decoded) => {
+            if (err) {
+                return next(new AppError("Refresh token expirado ou inválido", 401));
+            }
+
+            const newAccessToken = jwt.sign(
+                { id: decoded.id, email: decoded.email },
+                process.env.JWT_SECRET,
+                { expiresIn: process.env.JWT_EXPIRES_IN }
+            );
+
+            res.status(200).json({
+                message: "Novo access token gerado com sucesso",
+                accessToken: newAccessToken
+            });
+        });
+    });
+
 }
 
 module.exports = authController;

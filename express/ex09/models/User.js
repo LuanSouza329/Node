@@ -64,6 +64,23 @@ class User {
         return rows[0];
     }
 
+    static async updateRefreshToken(id, token) {
+        const conn = await db.getConnection();
+        await conn.query("UPDATE usuarios SET refresh_token = ? WHERE id = ?", [token, id]);
+        return true;
+    }
+
+    static async findByRefreshToken(refreshToken) {
+        console.log(refreshToken);
+        const conn = await db.getConnection();
+        const [rows] = await conn.query(
+            "SELECT * FROM usuarios WHERE refresh_token = ?",
+            [refreshToken]
+        );
+        return rows[0];
+    }
+
+
 }
 
 module.exports = User;
