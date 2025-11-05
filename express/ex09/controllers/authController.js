@@ -97,6 +97,24 @@ class authController {
         });
     });
 
+    static logout = asyncHandler(async (req, res, next) => {
+        const { refreshToken } = req.body;
+
+        if (!refreshToken) {
+            return next(new AppError("Refresh token é obrigatório", 400));
+        }
+
+        const user = await User.findByRefreshToken(refreshToken);
+
+        if (!user){
+            return next(new AppError("Token invalido ou não encontrado", 401));
+        }
+
+        await User.updateRefreshToken(user.id, null);
+
+        res.status(200).json({message: "Logout realizado com sucesso"});
+    })
+
 }
 
 module.exports = authController;

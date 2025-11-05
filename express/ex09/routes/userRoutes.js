@@ -3,8 +3,11 @@ const { body, param, query } = require("express-validator");
 const UserController = require("../controllers/userController");
 const authMiddleware = require("../middleware/authMiddleWare");
 const roleMiddleware = require("../middleware/roleMiddleware");
-const router = express.Router();
 const validate = require("../middleware/validate");
+const upload = require("../middleware/upload");
+const router = express.Router();
+
+
 
 /**
  * @swagger
@@ -282,13 +285,45 @@ router.put(
 
 router.delete(
   "/:id",
-    authMiddleware,
+  authMiddleware,
   [
     param("id").isInt().withMessage("O ID deve ser um número inteiro"),
     validate
   ],
   UserController.deleteUser
 );
+
+/**
+ * @swagger
+ * /users/upload:
+ *   post:
+ *     summary: Faz upload da foto de perfil do usuário
+ *     tags: [Usuários]
+ *     consumes:
+ *       - multipart/form-data
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               file:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: Upload realizado com sucesso
+ */
+router.post("/upload", upload.single("file"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: "Nenhum arquivo enviado" });
+  }
+  res.status(200).json({
+    message: "Upload realizado com sucesso!",
+    file: req.file
+  });
+});
 
 module.exports = router;
 

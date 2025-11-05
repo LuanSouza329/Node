@@ -150,7 +150,34 @@ router.post("/login",
  *       401:
  *         description: Refresh token inválido ou expirado
  */
-router.post("/refresh", authController.refreshToken)
+router.post("/refresh", authController.refreshToken);
+
+/**
+ * @swagger
+ * /auth/logout:
+ *   post:
+ *     summary: Faz o logout do usuário e invalida o refresh token
+ *     tags: [Autenticação]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               refreshToken:
+ *                 type: string
+ *                 description: O refresh token do usuário
+ *     responses:
+ *       200:
+ *         description: Logout realizado com sucesso
+ *       400:
+ *         description: Refresh token ausente
+ *       401:
+ *         description: Token inválido ou expirado
+ */
+router.post("/logout", authController.logout);
+
 
 module.exports = router;
 
