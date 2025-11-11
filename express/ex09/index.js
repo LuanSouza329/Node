@@ -27,6 +27,7 @@ const limiter = rateLimit({
 })
 
 app.use(express.json());
+app.use("/uploads", express.static("uploads"));
 app.use(logger);
 app.use(cors({
   origin: "http://localhost:3000"
@@ -40,6 +41,14 @@ app.use("/auth", authRouter);
 // 👇 sempre no final
 app.use(errorHandler);
 
-app.listen(PORT, () => {
+/* app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
-});
+}); */
+
+if (require.main === module) {
+  const PORT = process.env.PORT || 8000;
+  app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
+}
+
+
+module.exports = app;

@@ -297,8 +297,10 @@ router.delete(
  * @swagger
  * /users/upload:
  *   post:
- *     summary: Faz upload da foto de perfil do usuário
+ *     summary: Faz upload da foto de perfil do usuário autenticado
  *     tags: [Usuários]
+ *     security:
+ *       - bearerAuth: []
  *     consumes:
  *       - multipart/form-data
  *     requestBody:
@@ -314,16 +316,15 @@ router.delete(
  *     responses:
  *       200:
  *         description: Upload realizado com sucesso
+ *       401:
+ *         description: Token inválido ou ausente
  */
-router.post("/upload", upload.single("file"), (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: "Nenhum arquivo enviado" });
-  }
-  res.status(200).json({
-    message: "Upload realizado com sucesso!",
-    file: req.file
-  });
-});
+router.post(
+  "/upload",
+  authMiddleware,           // 🔒 Garante que o usuário está autenticado
+  upload.single("file"),    // 📎 Faz o upload
+  UserController.uploadPhoto // 🧠 Chama o controller
+);
 
 module.exports = router;
 

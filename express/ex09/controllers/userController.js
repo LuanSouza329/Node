@@ -71,7 +71,6 @@ class UserController {
     });
   })
 
-
   static deleteUser = asyncHandler(async (req, res, next) => {
     const { id } = req.params;
 
@@ -82,6 +81,25 @@ class UserController {
     }
 
     return res.status(200).json({ message: "Usuário deletado com sucesso" });
+  })
+
+  static uploadPhoto = asyncHandler(async (req, res, next) => {
+    const userId = req.body.id;
+    const file = req.file;
+
+    if (!file) {
+      return next(new AppError("Nenhum arquivo foi enviado", 400));
+    }
+
+    await User.updatePhoto(userId, file.filename);
+
+    res.status(200).json({
+      message: "Foto de perfil atualizada com sucesso!",
+      file: {
+        name: file.filename,
+        url: `${req.protocol}://${req.get("host")}/uploads/${file.filename}`
+      }
+    });
   })
 }
 

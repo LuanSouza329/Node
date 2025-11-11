@@ -85,6 +85,11 @@ class User {
         return true;
     }
 
+    static async updatePhoto(id, filename) {
+        const conn = await db.getConnection();
+        await conn.query("UPDATE usuarios SET profile_image = ? WHERE id = ?", [filename, id]);
+        return true;
+    }
 
 }
 
