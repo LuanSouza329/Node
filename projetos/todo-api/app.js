@@ -1,18 +1,16 @@
 import express from "express";
 import dotenv from "dotenv";
+import taskRouter from "./routes/taskRoute.js";
 
+dotenv.config();
 
-("dotenv").config();
-
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT ;
 
 const app = express();
 
 app.use(express.json());
 
-app.get("/", (req, res)=>{
-    res.json("Olá mundo");
-})
+app.use("/task", taskRouter);
 
 
 app.listen(PORT, ()=>{
