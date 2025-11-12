@@ -1,0 +1,68 @@
+# -----------------------------
+# 📦 Node.js e dependências
+# -----------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+
+# -----------------------------
+# ⚙️ Ambiente
+# -----------------------------
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# -----------------------------
+# 🧠 Logs e cache
+# -----------------------------
+logs/
+*.log
+log.txt
+debug.log
+coverage/
+.cache/
+dist/
+build/
+tmp/
+temp/
+
+# -----------------------------
+# 🧪 Testes
+# -----------------------------
+jest.config.js
+*.test.js
+*.spec.js
+__tests__/
+coverage/
+.vscode/
+.idea/
+
+# -----------------------------
+# 🪶 Sistema operacional
+# -----------------------------
+.DS_Store
+Thumbs.db
+
+# -----------------------------
+# 🚀 Deploy e ferramentas
+# -----------------------------
+*.env.*
+.envrc
+.env.backup
+*.pid
+*.seed
+*.tgz
+*.tar.gz
+
+# -----------------------------
+# 💾 Banco de dados
+# -----------------------------
+*.sqlite
+*.db
+*.sql
+dump.rdb
