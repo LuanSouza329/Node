@@ -31,7 +31,21 @@ export default class TaskController {
         res.status(200).json({
             message: "Task criada com sucesso",
             tasks: netTask
-        })
+        });
+    })
+
+    static getTask = asyncHandler(async (req, res)=>{
+        const {id} = req.params;
+
+        const task = await Task.getTask(id);
+
+        if(!task){
+            return res.status(404).json({
+                message: `Task não encontrada ou não eistente`
+            });
+        }
+
+        res.status(200).json(task)
     })
 }
 

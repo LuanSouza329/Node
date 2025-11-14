@@ -11,6 +11,12 @@ class Task {
         const [result] = await db.getConnection().query("INSERT INTO tarefas (titulo, descricao) VALUES (?, ?)", [titulo, descricao]);
         return { id: result.insertId, titulo, descricao };
     }
+
+    static async getTask(id) {
+        const [rows] = await db.getConnection().query("SELECT * FROM tarefas WHERE id = ?", [id]);
+        return rows[0];
+    }
+
 }
 
 
