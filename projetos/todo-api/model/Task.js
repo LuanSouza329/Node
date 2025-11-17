@@ -17,7 +17,23 @@ class Task {
         return rows[0];
     }
 
-}
+    static async updateTask(id, titulo, descricao) {
+        const [result] = await db.getConnection().query("UPDATE tarefas SET titulo = ?, descricao = ? WHERE id = ?", [titulo, descricao, id]);
 
+        if (result.affectedRows === 0) {
+            return null;
+        }
+
+        return { id, titulo, descricao };
+    }
+
+    static async deleteTask(id) {
+        const [result] = await db.getConnection().query("DELETE FROM tarefas WHERE id = ?", [id]);
+
+        if (result.affectedRows === 0) {
+            return null;
+        }
+    }
+}
 
 export default Task;
