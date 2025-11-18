@@ -1,15 +1,14 @@
 import Task from "../model/Task.js";
+import AppError from "../util/AppError.js";
 import { asyncHandler } from "../middleware/asyncMiddleWare.js";
 
 export default class TaskController {
-    static getAllTask = asyncHandler(async (req, res) => {
+    static getAllTask = asyncHandler(async (req, res, next) => {
 
         const tasks = await Task.getAllTask();
 
         if (!tasks) {
-            return res.status(404).json({
-                message: "Taks não encontadas ou não há Tasks"
-            });
+            return next(new AppError("Tasks não encontrada", 404));
         }
 
         res.status(200).json({
@@ -17,13 +16,12 @@ export default class TaskController {
         });
     })
 
-    static createTask = asyncHandler(async (req, res) => {
+    static createTask = asyncHandler(async (req, res, next) => {
         const { titulo, descricao } = req.body;
 
-        if (!titulo && !descricao) {
-            return res.status(400).json({
-                message: "Titulo e descrição são campos obrigatório"
-            });
+
+        if (!titulo || !descricao) {
+            return next(new AppError("Os campos título e descrição são obrigatórios", 400));
         }
 
         const netTask = await Task.createTask(titulo, descricao);
@@ -40,23 +38,19 @@ export default class TaskController {
         const task = await Task.getTask(id);
 
         if (!task) {
-            return res.status(404).json({
-                message: `Task não encontrada ou não eistente`
-            });
+            return next(new AppError("Task não encontrada ou não existente", 404));
         }
 
         res.status(200).json(task)
     });
 
-    static updateTask = asyncHandler(async (req, res) => {
+    static updateTask = asyncHandler(async (req, res,next) => {
         const { id } = req.params;
 
         const { titulo, descricao } = req.body;
 
-        if (!titulo) {
-            return res.status(200).json({
-                message: "Titulo e Descrição são campos obrigatórios"
-            });
+        if (!titulo || !descricao) {
+            return next(new AppError("Os campos título e descrição são obrigatórios", 400));
         }
 
         const updatedTask = await Task.updateTask(id, titulo, descricao);
@@ -73,15 +67,13 @@ export default class TaskController {
         });
     })
 
-    static deleteTask = asyncHandler(async (req, res) => {
+    static deleteTask = asyncHandler(async (req, res, next) => {
         const { id } = req.params;
 
         const deleted = await Task.deleteTask(id);
 
         if (!deleted) {
-            return res.status(404).json({
-                message: "Task não encontrada"
-            });
+            return next(new AppError ("Erro ao deletar Task ou Task não encontrada", 404));
         }
 
         res.status(200).json({

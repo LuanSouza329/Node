@@ -33,6 +33,7 @@ class Task {
         if (result.affectedRows === 0) {
             return null;
         }
+        return result.affectedRows > 0;
     }
 }
 

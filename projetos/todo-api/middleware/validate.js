@@ -5,11 +5,8 @@ export const validate = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const message = errors.array().map(err => err.msg).join(", ");
-    return res.status(200).json({
-      message: message
-    })
+    return  next(new AppError(message, 400)); 
   }
   next();
 };
 
-/* next(new AppError(message, 400)); */

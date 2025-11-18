@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import { errorHandler } from "./middleware/errorHandler.js";
 import taskRouter from "./routes/taskRoute.js";
 
 dotenv.config();
@@ -11,6 +12,8 @@ const app = express();
 app.use(express.json());
 
 app.use("/task", taskRouter);
+
+app.use(errorHandler);
 
 
 app.listen(PORT, ()=>{
