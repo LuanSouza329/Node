@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.get("/", TaskController.getAllTask);
 
-router.get("/:id",
+router.get("/search/:id",
     [
         param("id")
             .isInt().withMessage("O ID deve ser um número inteiro")
@@ -16,7 +16,7 @@ router.get("/:id",
     ],
     TaskController.getTask);
 
-router.post("/",
+router.post("/create",
     body("titulo")
 
         .trim().notEmpty().withMessage("Titulo é um campo obrigatório")
@@ -31,7 +31,7 @@ router.post("/",
     validate,
     TaskController.createTask);
 
-router.put("/:id",
+router.put("/update/:id",
     [
         param("id")
             .isInt().withMessage("O ID deve ser um número inteiro")
@@ -52,7 +52,7 @@ router.put("/:id",
     ],
     TaskController.updateTask);
 
-router.delete("/:id",
+router.delete("/delete/:id",
     [
         param("id")
             .isInt().withMessage("O ID deve ser um número inteiro")

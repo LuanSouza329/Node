@@ -1,5 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
+import helmet from "helmet";
+import cors from "cors";
+import { rateLimit } from "express-rate-limit";
 import { errorHandler } from "./middleware/errorHandler.js";
 import taskRouter from "./routes/taskRoute.js";
 
@@ -9,7 +12,19 @@ const PORT = process.env.PORT ;
 
 const app = express();
 
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, 
+    limit: 80,
+    standardHeaders: "draft-8",
+    legacyHeaders: false,
+    ipv6Subnet: 56,
+    message: "Limite de requesições ultrapassado, tente mais tarde"
+});
+
 app.use(express.json());
+app.use(cors());
+app.use(helmet());
+app.use(limiter);
 
 app.use("/task", taskRouter);
 
