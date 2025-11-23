@@ -5,12 +5,14 @@ import cors from "cors";
 import { rateLimit } from "express-rate-limit";
 import { errorHandler } from "./middleware/errorHandler.js";
 import taskRouter from "./routes/taskRoute.js";
+import swaggerDocs from "../../express/ex09/config/swagger.js";
 
 dotenv.config();
 
 const PORT = process.env.PORT ;
 
 const app = express();
+swaggerDocs(app);
 
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, 
