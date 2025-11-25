@@ -26,7 +26,7 @@ export default class TaskController {
 
         const netTask = await Task.createTask(titulo, descricao);
 
-        res.status(200).json({
+        res.status(201).json({
             message: "Task criada com sucesso",
             tasks: netTask
         });

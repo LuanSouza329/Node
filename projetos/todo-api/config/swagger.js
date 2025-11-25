@@ -5,9 +5,9 @@ const options = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "API de Usuários",
+      title: "API to do list",
       version: "1.0.0",
-      description: "API RESTful com autenticação JWT e CRUD de usuários"
+      description: "API RESTful to-do-list"
     },
     servers: [
       { url: "http://localhost:8000" }
