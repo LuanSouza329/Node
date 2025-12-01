@@ -1,3 +1,4 @@
+import db from "./config/database.js";
 import express from "express";
 import dotenv from "dotenv";
 import helmet from "helmet";
@@ -10,6 +11,8 @@ import swaggerDocs from "../../express/ex09/config/swagger.js";
 dotenv.config();
 
 const PORT = process.env.PORT ;
+
+await db.connect();
 
 const app = express();
 swaggerDocs(app);
@@ -36,3 +39,4 @@ app.use(errorHandler);
 app.listen(PORT, ()=>{
     console.log(`Servidor rodando em http://localhost:${PORT}`);
 })
+
