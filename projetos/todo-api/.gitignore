@@ -35,9 +35,6 @@ temp/
 # 🧪 Testes
 # -----------------------------
 jest.config.js
-*.test.js
-*.spec.js
-__tests__/
 coverage/
 .vscode/
 .idea/
