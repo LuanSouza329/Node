@@ -1,4 +1,3 @@
-import db from "./config/database.js";
 import express from "express";
 import dotenv from "dotenv";
 import helmet from "helmet";
@@ -10,20 +9,17 @@ import swaggerDocs from "../../express/ex09/config/swagger.js";
 
 dotenv.config();
 
-const PORT = process.env.PORT ;
-
-await db.connect();
-
 const app = express();
+
 swaggerDocs(app);
 
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, 
-    limit: 80,
-    standardHeaders: "draft-8",
-    legacyHeaders: false,
-    ipv6Subnet: 56,
-    message: "Limite de requesições ultrapassado, tente mais tarde"
+  windowMs: 15 * 60 * 1000,
+  limit: 80,
+  standardHeaders: "draft-8",
+  legacyHeaders: false,
+  ipv6Subnet: 56,
+  message: "Limite de requisições ultrapassado, tente mais tarde"
 });
 
 app.use(express.json());
@@ -33,10 +29,7 @@ app.use(limiter);
 
 app.use("/api", taskRouter);
 
+// Tratamento de erros
 app.use(errorHandler);
 
-
-app.listen(PORT, ()=>{
-    console.log(`Servidor rodando em http://localhost:${PORT}`);
-})
-
+export default app;
