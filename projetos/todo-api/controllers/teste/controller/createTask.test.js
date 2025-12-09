@@ -47,7 +47,7 @@ describe("Create a Task", () => {
         expect(res.body.tasks).toHaveProperty("descricao");
     });
 
-    test("Retorna 500 quando ocorre um erro inesperado no model", async () => {
+    test("Returns 500 if there is a model error ", async () => {
         Task.createTask.mockRejectedValueOnce(new Error("Erro interno"));
 
         const res = await request(app)
@@ -63,7 +63,7 @@ describe("Create a Task", () => {
         expect(res.body.message).toBe("Erro interno do servidor");
     });
 
-    test("Retorna erro 400 quando faltar dados obrigatórios", async () => {
+    test("Returns an error 400 when missing requested fields", async () => {
         const res = await request(app)
             .post("/api/task/create")
             .send({

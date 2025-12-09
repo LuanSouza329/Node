@@ -43,7 +43,7 @@ describe("GET /task/:id", () => {
         expect(res.body[0]).toHaveProperty("descricao");
     });
 
-    test("Retorna 404 quando task não existe", async () => {
+    test("Returns 404 when there is no task", async () => {
         Task.getTask.mockResolvedValueOnce(null);
 
         const res = await request(app).get("/api/task/search/999")

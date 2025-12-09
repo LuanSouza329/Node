@@ -48,7 +48,7 @@ describe("UPDATE/TASK/:id", () => {
     });
 
 
-    test("Retorna 404 quando task não existe", async () => {
+    test("Returns 404 if there is no matching task", async () => {
         Task.getTask.mockResolvedValueOnce(null);
 
         const res = await request(app)
@@ -61,7 +61,7 @@ describe("UPDATE/TASK/:id", () => {
         expect(res.body.message).toBe("Task não encontrada ou não existente");
     });
 
-    test("Retorna 500 quando ocorre um erro inesperado no model", async () => {
+    test("Returns 500 when there is a model error", async () => {
         Task.updateTask.mockRejectedValueOnce(new Error("Erro interno"));
 
         const res = await request(app)
@@ -71,7 +71,6 @@ describe("UPDATE/TASK/:id", () => {
                 descricao: "Desc"
             })
             .expect('Content-Type', /json/);
-
 
         expect(res.statusCode).toBe(500);
         expect(res.body.message).toBe("Erro interno do servidor");
