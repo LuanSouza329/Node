@@ -57,7 +57,7 @@ export default class TaskController {
 
         if (!updatedTask) {
             return res.status(404).json({
-                message: "Task não encontrada"
+                message: "Task não encontrada ou não existente",
             });
         }
 
