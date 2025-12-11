@@ -25,54 +25,45 @@ beforeEach(async () => {
     app = (await import("../../../app.js")).default;
 });
 
-
-describe("UPDATE/TASK/:id", () => {
-    test("Returns a task updated", async () => {
-        Task.updateTask.mockResolvedValueOnce({
-            id: 1,
-            titulo: "Teste",
-            descricao: "Desc"
+describe("TASK / DELETE", () => {
+    test("Delete a task successfully", async () => {
+        Task.deleteTask.mockResolvedValue({
+            message: "Task deletada com sucesso"
         });
 
         const res = await request(app)
-            .put("/api/task/update/1")
-            .send({ titulo: "Teste", descricao: "Desc" })
+            .delete("/api/task/delete/1")
             .expect('Content-Type', /json/);
-
 
         expect(res.statusCode).toBe(200);
-        expect(res.body.message).toBe("Task atualizada com sucesso");
-        expect(res.body.task).toHaveProperty("id");
-        expect(res.body.task).toHaveProperty("titulo");
-        expect(res.body.task).toHaveProperty("descricao");
-    });
-
+        expect(res.body.message).toBe("Task deletada com sucesso");
+        expect(res.body).toHaveProperty("message");
+    })
 
     test("Returns 404 if there is no matching task", async () => {
-        Task.updateTask.mockResolvedValueOnce(null);
+        Task.deleteTask.mockResolvedValue(null)
 
         const res = await request(app)
-            .put("/api/task/update/1")
-            .send({ titulo: "Teste", descricao: "Desc" })
-            .expect('Content-Type', /json/);
-
+            .delete("/api/task/delete/999")
+            .expect("Content-Type", /json/);
 
         expect(res.statusCode).toBe(404);
-        expect(res.body.message).toBe("Task não encontrada ou não existente");
+        expect(res.body.message).toBe("Erro ao deletar Task ou Task não encontrada");
     });
 
     test("Returns 500 when there is a model error", async () => {
-        Task.updateTask.mockRejectedValueOnce(new Error("Erro interno"));
+
+        Task.deleteTask.mockRejectedValue(
+            new Error("Erro interno do servidor")
+        );
 
         const res = await request(app)
-            .put("/api/task/update/1")
-            .send({
-                titulo: "Teste",
-                descricao: "Desc"
-            })
-            .expect('Content-Type', /json/);
+            .delete("/api/task/delete/1")
+            .expect("Content-Type", /json/);
 
         expect(res.statusCode).toBe(500);
         expect(res.body.message).toBe("Erro interno do servidor");
     });
+
 })
+
