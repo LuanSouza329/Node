@@ -68,14 +68,13 @@ router.get("/task", TaskController.getAllTask);
  *         description: Erro interno do servidor
  */
 
-router.get("/task/search/:id",
-    [
-        param("id")
-            .isInt().withMessage("O ID deve ser um número inteiro")
-            .trim(),
-        validate
-    ],
-    TaskController.getTask);
+router.get(
+  "/task/search/:id",
+  param("id").isInt().withMessage("O ID deve ser um número inteiro").trim(),
+  validate,
+  TaskController.getTask
+);
+
 
 /**
  * @swagger
@@ -204,27 +203,26 @@ router.post("/task/create",
  *         description: Erro interno do servidor
  */
 
-router.put("/task/update/:id",
-    [
-        param("id")
-            .isInt().withMessage("O ID deve ser um número inteiro")
-            .trim(),
+router.put(
+  "/task/update/:id",
+  param("id").isInt().withMessage("O ID deve ser um número inteiro").trim(),
 
-        body("titulo")
+  body("titulo")
+    .trim()
+    .notEmpty().withMessage("Titulo é um campo obrigatório")
+    .isLength({ min: 3 }).withMessage("O tamanho mínimo do campo título é 3")
+    .escape(),
 
-            .trim().notEmpty().withMessage("Titulo é um campo obrigatório")
-            .isLength({ min: 3 }).withMessage("O tamanho mínimo do campo título é 3")
-            .escape(),
+  body("descricao")
+    .trim()
+    .notEmpty().withMessage("Descricao é um campo obrigatório")
+    .isLength({ min: 3 }).withMessage("O tamanho mínimo do campo descricao é 3")
+    .escape(),
 
-        body("descricao")
+  validate,
+  TaskController.updateTask
+);
 
-            .trim().notEmpty().withMessage("Descricao é um campo obrigatório")
-            .isLength({ min: 3 }).withMessage("O tamanho mínimo do campo descricao é 3")
-            .escape(),
-
-        validate,
-    ],
-    TaskController.updateTask);
 
 /**
  * @swagger
@@ -245,14 +243,13 @@ router.put("/task/update/:id",
  *       404:
  *         description: task não encontrado
  */
-router.delete("/task/delete/:id",
-    [
-        param("id")
-            .isInt().withMessage("O ID deve ser um número inteiro")
-            .trim(),
-        validate
-    ],
-    TaskController.deleteTask);
+router.delete(
+  "/task/delete/:id",
+  param("id").isInt().withMessage("O ID deve ser um número inteiro").trim(),
+  validate,
+  TaskController.deleteTask
+);
+
 
 
 export default router;
