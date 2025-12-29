@@ -33,13 +33,26 @@ describe("PUT/api/task/update/:id", () => {
         expect(res.body.message).toBe("Task atualizada com sucesso");
     });
 
-    test("404 Bad Request", async () => {
-        
+    test("400 Bad Request", async () => {
+
         const res = await request(app)
             .put("/api/task/update/abc")
             .send({ titulo: "Teste", descricao: "Desc" });
 
         expect(res.status).toBe(400);
         expect(res.body.message).toBe("O ID deve ser um número inteiro");
+    });
+
+    test("404 task does not exist or not found", async () => {
+
+        Task.updateTask.mockResolvedValueOnce(null);
+
+        const res = await request(app)
+            .put("/api/task/update/1000")
+            .send({ titulo: "Teste", descricao: "Desc" })
+            .expect("Content-Type", /json/);
+
+        expect(res.status).toBe(404);
+        expect(res.body.message).toBe("Task não encontrada ou não existente");
     });
 })

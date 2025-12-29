@@ -44,4 +44,16 @@ describe("Get api/task/search/:id", () => {
         expect(res.status).toBe(400);
         expect(res.body.message).toBe("O ID deve ser um número inteiro");
     });
+
+    test("404 task does not exist or not found", async () => {
+
+        Task.getTask.mockResolvedValueOnce(null);
+
+        const res = await request(app)
+            .get("/api/task/search/1000")
+            .expect("Content-Type", /json/);
+
+        expect(res.status).toBe(404);
+        expect(res.body.message).toBe("Task não encontrada ou não existente");
+    });
 })

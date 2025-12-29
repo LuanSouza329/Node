@@ -12,5 +12,4 @@ await db.connect();
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
   console.log("📘 Documentação disponível em http://localhost:8000/api-docs");
-
 });
