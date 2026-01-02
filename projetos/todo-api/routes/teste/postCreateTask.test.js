@@ -17,14 +17,6 @@ beforeEach(async () => {
 
 describe("POST /api/task/create", () => {
 
-    test("400 - título ausente", async () => {
-        const res = await request(app)
-            .post("/api/task/create")
-            .send({ descricao: "Desc" });
-
-        expect(res.statusCode).toBe(400);
-    });
-
     test("201 - cria task", async () => {
         Task.createTask.mockResolvedValueOnce({
             id: 1,
@@ -40,6 +32,15 @@ describe("POST /api/task/create", () => {
         expect(res.body.message).toBe("Task criada com sucesso");
         expect(res.body.tasks).toHaveProperty("id");
     });
+
+    test("400 - título ausente", async () => {
+        const res = await request(app)
+            .post("/api/task/create")
+            .send({ descricao: "Desc" });
+
+        expect(res.statusCode).toBe(400);
+    });
+
 
     test("400 - campos obrigatórios", async () => {
         const res = await request(app)

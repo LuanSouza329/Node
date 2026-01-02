@@ -40,4 +40,16 @@ describe("Delete /api/delete/:id", () => {
         expect(res.status).toBe(400);
         expect(res.body.message).toBe("O ID deve ser um número inteiro");
     });
+
+    test("404 task does not exist or not found", async () => {
+
+        Task.deleteTask.mockResolvedValueOnce(null);
+
+        const res = await request(app)
+            .delete("/api/task/delete/1000")
+            .expect("Content-Type", /json/);
+
+        expect(res.status).toBe(404);
+        expect(res.body.message).toBe("Erro ao deletar Task ou Task não encontrada");
+    });
 })
