@@ -27,13 +27,46 @@ class Task {
         return { id, titulo, descricao };
     }
 
+    static async updateTitle(id, titulo) {
+        const [result] = await db.getConnection().query(
+            "UPDATE tarefas SET titulo = ? WHERE id = ?",
+            [titulo, id]
+        );
+
+        if (result.affectedRows === 0) return null;
+
+        return { id, titulo };
+    }
+
+    static async updateDescription(id, descricao) {
+        const [result] = await db.getConnection().query(
+            "UPDATE tarefas SET descricao = ? WHERE id = ?",
+            [descricao, id]
+        );
+
+        if (result.affectedRows === 0) return null;
+
+        return { id, descricao };
+    }
+
+    static async updateStatus(id, status) {
+        const [result] = await db.getConnection().query(
+            "UPDATE tarefas SET status = ? WHERE id = ?",
+            [status, id]
+        );
+
+        if (result.affectedRows === 0) return null;
+
+        return { id, status };
+    }
+
     static async deleteTask(id) {
         const [result] = await db.getConnection().query("DELETE FROM tarefas WHERE id = ?", [id]);
 
         if (result.affectedRows === 0) {
             return null;
         }
-        
+
         return result.affectedRows > 0;
     }
 }

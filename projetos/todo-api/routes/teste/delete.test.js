@@ -52,4 +52,4 @@ describe("Delete /api/delete/:id", () => {
         expect(res.status).toBe(404);
         expect(res.body.message).toBe("Erro ao deletar Task ou Task não encontrada");
     });
-})
+});

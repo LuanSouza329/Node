@@ -56,4 +56,4 @@ describe("Get api/task/search/:id", () => {
         expect(res.status).toBe(404);
         expect(res.body.message).toBe("Task não encontrada ou não existente");
     });
-})
+});

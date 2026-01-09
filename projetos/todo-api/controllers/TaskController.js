@@ -44,7 +44,7 @@ export default class TaskController {
         res.status(200).json(task)
     });
 
-    static updateTask = asyncHandler(async (req, res,next) => {
+    static updateTask = asyncHandler(async (req, res, next) => {
         const { id } = req.params;
 
         const { titulo, descricao } = req.body;
@@ -65,7 +65,81 @@ export default class TaskController {
             message: "Task atualizada com sucesso",
             task: updatedTask
         });
-    })
+    });
+
+    static updateTitle = asyncHandler(async (req, res, next) => {
+        const { id } = req.params;
+
+        const { titulo } = req.body;
+
+        if (!titulo) {
+            return next(new AppError("O campo título é obrigatório", 400));
+        }
+
+        const updatedTitle = await Task.updateTitle(id, titulo);
+
+        if (!updatedTitle) {
+            return res.status(404).json({
+                message: "Task não encontrada ou não existente",
+            });
+        }
+
+        res.status(200).json({
+            message: "Titulo atualizado com sucesso",
+            task: updatedTitle
+        });
+    });
+
+    static updateDescription = asyncHandler(async (req, res, next) => {
+        const { id } = req.params;
+
+        const { descricao } = req.body;
+
+        if (!descricao) {
+            return next(new AppError("O campo descrição é obrigatório", 400));
+        }
+
+        const updatedDescription = await Task.updateDescription(id, descricao);
+
+        if (!updatedDescription) {
+            return res.status(404).json({
+                message: "Task não encontrada ou não existente",
+            });
+        }
+
+        res.status(200).json({
+            message: "Descrição atualizado com sucesso",
+            task: updatedDescription
+        });
+    });
+
+    static updateStatus = asyncHandler(async (req, res, next) => {
+        const { id } = req.params;
+        const { status } = req.body;
+
+        if (!status) {
+            return next(new AppError("O status é obrigatório para atualização", 400));
+        }
+
+        const validStatuses = ["pendente", "concluída"];
+        if (!validStatuses.includes(status)) {
+            return next(new AppError("Status inválido", 400));
+        }
+
+        const updated = await Task.updateStatus(id, status);
+
+        if (!updated) {
+            return res.status(404).json({
+                message: "Task não encontrada",
+            });
+        }
+
+        res.status(200).json({
+            message: "Status atualizado com sucesso",
+            task: updated
+        });
+    });
+
 
     static deleteTask = asyncHandler(async (req, res, next) => {
         const { id } = req.params;
@@ -73,7 +147,7 @@ export default class TaskController {
         const deleted = await Task.deleteTask(id);
 
         if (!deleted) {
-            return next(new AppError ("Erro ao deletar Task ou Task não encontrada", 404));
+            return next(new AppError("Erro ao deletar Task ou Task não encontrada", 404));
         }
 
         res.status(200).json({

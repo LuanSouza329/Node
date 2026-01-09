@@ -10,6 +10,6 @@ const PORT = process.env.PORT || 8000;
 await db.connect();
 
 app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
+  console.log(`Servidor rodando em http://localhost:${PORT}/api/task`);
   console.log("📘 Documentação disponível em http://localhost:8000/api-docs");
 });
