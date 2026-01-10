@@ -121,11 +121,6 @@ export default class TaskController {
             return next(new AppError("O status é obrigatório para atualização", 400));
         }
 
-        const validStatuses = ["pendente", "concluída"];
-        if (!validStatuses.includes(status)) {
-            return next(new AppError("Status inválido", 400));
-        }
-
         const updated = await Task.updateStatus(id, status);
 
         if (!updated) {
@@ -139,7 +134,6 @@ export default class TaskController {
             task: updated
         });
     });
-
 
     static deleteTask = asyncHandler(async (req, res, next) => {
         const { id } = req.params;

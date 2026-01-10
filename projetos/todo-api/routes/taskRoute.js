@@ -130,19 +130,19 @@ router.get(
  */
 
 router.post("/task/create",
-    body("titulo")
+  body("titulo")
 
-        .trim().notEmpty().withMessage("Titulo é um campo obrigatório")
-        .isLength({ min: 3 }).withMessage("O tamanho mínimo do campo título é 3")
-        .escape(),
+    .trim().notEmpty().withMessage("Titulo é um campo obrigatório")
+    .isLength({ min: 3 }).withMessage("O tamanho mínimo do campo título é 3")
+    .escape(),
 
-    body("descricao")
-        .trim().notEmpty().withMessage("Descricao é um campo obrigatório")
-        .isLength({ min: 3 }).withMessage("O tamanho mínimo do campo descricao é 3")
-        .escape(),
+  body("descricao")
+    .trim().notEmpty().withMessage("Descricao é um campo obrigatório")
+    .isLength({ min: 3 }).withMessage("O tamanho mínimo do campo descricao é 3")
+    .escape(),
 
-    validate,
-    TaskController.createTask);
+  validate,
+  TaskController.createTask);
 
 /**
  * @swagger
@@ -221,6 +221,45 @@ router.put(
 
   validate,
   TaskController.updateTask
+);
+
+router.patch(
+  "/task/update/title/:id",
+
+  param("id").isInt().withMessage("O ID deve ser um número inteiro").trim()
+
+    .trim()
+    .notEmpty().withMessage("Titulo é um campo obrigatório")
+    .escape(),
+
+  validate,
+  TaskController.updateTitle
+);
+
+router.patch(
+  "/task/update/description/:id",
+
+  param("id").isInt().withMessage("O ID deve ser um número inteiro").trim()
+
+    .trim()
+    .notEmpty().withMessage("Descrição é um campo obrigatório")
+    .escape(),
+
+  validate,
+  TaskController.updateDescription
+);
+
+router.patch(
+  "/task/update/status/:id",
+
+  param("id").isInt().withMessage("O ID deve ser um número inteiro").trim()
+
+    .trim()
+    .notEmpty().withMessage("Status é um campo obrigatório")
+    .escape(),
+
+  validate,
+  TaskController.updateStatus
 );
 
 
