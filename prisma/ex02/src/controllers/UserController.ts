@@ -1,4 +1,5 @@
 import { prisma } from '../lib/prisma';
+import { Prisma } from '@prisma/client';
 import { Request, Response } from 'express';
 
 export class UserController {
@@ -18,6 +19,14 @@ export class UserController {
 
         const id: number = Number(req.params.id);
 
+        if (isNaN(id)) {
+            return res.status(400).json({ error: 'The ID must be a number.' });
+        }
+
+        if (id <= 0 || !Number.isInteger(id)) {
+            return res.status(400).json({ error: 'User ID must be a positive integer.' });
+        }
+
         try {
             const user = await prisma.user.findUnique({
                 where: { id },
@@ -25,8 +34,8 @@ export class UserController {
             });
 
             if (!user) {
-                res.status(404).json({ error: 'User not found.' });
-                return;
+                return res.status(404).json({ error: 'User not found.' });
+                
             }
 
             return res.status(200).json(user);
@@ -36,15 +45,31 @@ export class UserController {
     }
 
     async createUser(req: Request, res: Response) {
+
         const { name, email } = req.body;
 
+
+        if (!name || !email) {
+            return res.status(400).json({ error: 'Name and email are required.' });
+        }
         try {
+            const existingUser = await prisma.user.findUnique({ where: { email } });
+
+            if (existingUser) {
+                return res.status(409).json({ error: 'Email already exists.' });
+            }
             const newUser = await prisma.user.create({
                 data: { name, email }
             });
 
             return res.status(201).json(newUser);
         } catch (error) {
+            if (error instanceof Prisma.PrismaClientKnownRequestError) {
+                if (error.code === 'P2002') {
+                    return res.status(409).json({ error: 'Email already exists.' });
+                }
+            }
+
             return res.status(500).json({ error: 'An error occurred while creating the user.' });
         }
     }
